@@ -59,11 +59,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun optionsClicked(view: View) {
-        if (optionsLayout.visibility == View.VISIBLE) {
-            optionsLayout.visibility = View.INVISIBLE
+        if (scrollView.visibility == View.VISIBLE) {
+            scrollView.visibility = View.INVISIBLE
             button.visibility = View.VISIBLE
         } else {
-            optionsLayout.visibility = View.VISIBLE
+            scrollView.visibility = View.VISIBLE
             button.visibility = View.INVISIBLE
         }
     }
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         endGame("")
     }
     fun closeOptions(view: View) {
-        optionsLayout.visibility = View.INVISIBLE
+        scrollView.visibility = View.INVISIBLE
         button.visibility = View.VISIBLE
     }
 }
