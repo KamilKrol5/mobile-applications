@@ -24,9 +24,10 @@
             android:paddingBottom="20dp" android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tableLayout" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.757"
+            android:onClick="startGame"/>
     <TextView
-            android:text="TicTacToe"
+            android:text="@string/tictactoe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView" android:textSize="30sp"
@@ -36,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent" android:fontFamily="monospace"
             app:layout_constraintVertical_bias="0.224"/>
     <TextView
-            android:text="Turn:"
+            android:text="@string/turn"
             android:layout_width="44dp"
             android:layout_height="50dp" android:id="@+id/turnLabel"
             android:layout_marginTop="8dp"
@@ -58,5 +59,28 @@
             app:layout_constraintVertical_bias="0.16000003" app:layout_constraintStart_toEndOf="@+id/turnLabel"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
             app:layout_constraintHorizontal_bias="0.5" android:scaleType="fitCenter"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/winnerTextView" android:textSize="30sp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/winnerImageView"
+            app:layout_constraintBottom_toTopOf="@+id/tableLayout" android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toTopOf="parent" android:textAlignment="textEnd"
+            android:fontFamily="monospace" android:visibility="invisible"
+            android:layout_marginBottom="8dp" app:layout_constraintVertical_bias="0.606"/>
+    <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp" app:srcCompat="@color/colorPrimary"
+            android:id="@+id/winnerImageView"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toEndOf="@+id/winnerTextView" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:visibility="invisible"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+            app:layout_constraintVertical_bias="0.606"/>
 
 </android.support.constraint.ConstraintLayout>
