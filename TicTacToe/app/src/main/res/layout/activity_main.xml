@@ -13,29 +13,31 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             android:id="@+id/tableLayout" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" android:gravity="center"/>
+            android:layout_marginTop="8dp"
+            android:gravity="center" app:layout_constraintTop_toBottomOf="@+id/winnerImageView"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/button21"/>
     <Button
             android:text="@string/start_game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button21" android:background="@color/buttonColor"
             android:paddingLeft="50dp" android:paddingRight="50dp" android:paddingTop="20dp"
-            android:paddingBottom="20dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.757"
-            android:onClick="startGame"/>
+            android:paddingBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="startGame"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:layout_constraintBottom_toTopOf="@+id/switch2"/>
     <TextView
             android:text="@string/tictactoe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView" android:textSize="30sp"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/tableLayout"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" android:fontFamily="monospace"
-            app:layout_constraintVertical_bias="0.224"/>
+    />
     <TextView
             android:text="@string/turn"
             android:layout_width="44dp"
@@ -62,14 +64,16 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:id="@+id/winnerTextView" android:textSize="30sp" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/winnerTextView" android:textSize="24sp" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/winnerImageView"
             app:layout_constraintBottom_toTopOf="@+id/tableLayout" android:layout_marginTop="8dp"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintTop_toTopOf="parent" android:textAlignment="textEnd"
+            app:layout_constraintTop_toTopOf="parent"
             android:fontFamily="monospace" android:visibility="invisible"
-            android:layout_marginBottom="8dp" app:layout_constraintVertical_bias="0.606"/>
+            android:layout_marginBottom="8dp" app:layout_constraintVertical_bias="0.62"
+            android:textAlignment="center"
+            android:gravity="bottom|center"/>
     <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp" app:srcCompat="@color/colorPrimary"
@@ -79,8 +83,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" android:visibility="invisible"
+            android:visibility="invisible"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/tableLayout"
-            app:layout_constraintVertical_bias="0.606"/>
+            app:layout_constraintVertical_bias="0.606" app:layout_constraintTop_toBottomOf="@+id/textView"/>
+    <Switch
+            android:text="Play against computer  "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch2"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button21" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.example.tictactoe
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageButton
@@ -34,11 +33,9 @@ class MainActivity : AppCompatActivity() {
     private var tiles = mutableMapOf<Pair<Int,Int>,Player>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-    Log.i("XD","$currentPlayer")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //buttonSize = (mainLayout.width / dimension)
-        Log.i("XD","$buttonSize")
         for (i in 1..dimension) {
             val tableRow = TableRow(this).apply {
                 gravity = Gravity.CENTER
@@ -87,14 +84,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkGameState() : Player? {
-//        var horizontalOwner : Player? = null
-//        var horizontalState = 0
-//        var verticalOwner : Player? = null
-//        var verticalState = 0
-//        var diagonalSEOwner : Player? = null
-//        var diagonalSE = 0
-//        var diagonalSWOwner : Player? = null
-//        var diagonalSW = 0
         for (i in 1..dimension) {
             tiles[i to 1]?.also { owner ->
                 if ((2..dimension).all { tiles[i to it] == owner }) {
@@ -119,53 +108,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return null
-//        for (i in 1..dimension) {
-//            verticalOwner = null
-//            horizontalOwner = null
-//            horizontalState = 0
-//            verticalState = 0
-//            for (j in 1..dimension) {
-//                tiles[i to j]?.also {
-//                    if (horizontalOwner == null) {
-//                        horizontalOwner = it
-//                        horizontalState ++
-//                    } else if (it == horizontalOwner) {
-//                        horizontalState ++
-//                    }
-//                }
-//                tiles[j to i]?.also {
-//                    if (verticalOwner == null) {
-//                        verticalOwner = it
-//                        verticalState ++
-//                    } else if (it == verticalOwner) {
-//                        verticalState ++
-//                    }
-//                }
-//            }
-//            tiles[i to i]?.also {
-//                if (diagonalSEOwner == null) {
-//                    diagonalSEOwner = it
-//                    diagonalSE ++
-//                } else if (it == diagonalSEOwner) {
-//                    diagonalSE ++
-//                }
-//            }
-//            tiles[i to (dimension - i + 1)]?.also {
-//                if (diagonalSWOwner == null) {
-//                    diagonalSWOwner = it
-//                    diagonalSW ++
-//                } else if (it == diagonalSWOwner) {
-//                    diagonalSW ++
-//                }
-//            }
-//            when {
-//                verticalState == dimension -> return verticalOwner
-//                horizontalState == dimension -> return horizontalOwner
-//                diagonalSE == dimension -> return diagonalSEOwner
-//                diagonalSW == dimension -> return diagonalSWOwner
-//            }
-//        }
-//        return null
     }
 
     private fun makeMove(button: ImageButton,player: Player) {
