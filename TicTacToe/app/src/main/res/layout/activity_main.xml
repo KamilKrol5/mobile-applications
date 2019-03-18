@@ -28,7 +28,7 @@
             android:onClick="startGame"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-            app:layout_constraintBottom_toTopOf="@+id/switch2"/>
+            app:layout_constraintBottom_toTopOf="@+id/switchPlayWithComputer"/>
     <TextView
             android:text="@string/tictactoe"
             android:layout_width="wrap_content"
@@ -87,12 +87,13 @@
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/tableLayout"
             app:layout_constraintVertical_bias="0.606" app:layout_constraintTop_toBottomOf="@+id/textView"/>
     <Switch
-            android:text="Play against computer  "
+            android:text="@string/play_against_computer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/switch2"
+            android:id="@+id/switchPlayWithComputer"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button21" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+            android:showText="false" android:splitTrack="false"/>
 
 </android.support.constraint.ConstraintLayout>

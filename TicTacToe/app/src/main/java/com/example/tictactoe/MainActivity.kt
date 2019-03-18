@@ -20,17 +20,17 @@ enum class Player{
 
 class MainActivity : AppCompatActivity() {
 
+    private var againstComputer = false
     private var areTilesResponsive = true
     private var player2 = Player.Circle
     private var player1 = Player.Cross
-//    var player2Img = R.drawable.circle
-//    var player1Img = R.drawable.cross
-    var pictures = mapOf(
+    private var pictures = mapOf(
         player1 to R.drawable.cross,
         player2 to R.drawable.circle
     )
     private var currentPlayer = pictures.keys.elementAt((Random.nextInt(Player.values().size)))
     private var tiles = mutableMapOf<Pair<Int,Int>,Player>()
+    private var coordsToButtons = mutableMapOf<Pair<Int,Int>,ImageButton>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +57,29 @@ class MainActivity : AppCompatActivity() {
                                 endGame(winner)
                             } else if (tiles.size == dimension * dimension) {
                                 endGame(null)
+                            } else {
+                                makeAIMove()
                             }
                         }
                     }
+                    coordsToButtons[i to j] = this
                 })
             }
             tableLayout.addView(tableRow)
+            switchPlayWithComputer.setOnClickListener {
+                againstComputer = switchPlayWithComputer.isChecked
+                makeAIMove()
+            }
+
         }
         changeCurrentPlayerImage(pictures.getValue(currentPlayer))
+    }
+
+    private fun makeAIMove() {
+        if (againstComputer && currentPlayer == player2 && areTilesResponsive) {
+            val availableButtons = coordsToButtons.filter { (k,_) -> !tiles.containsKey(k) }
+            availableButtons.values.random().callOnClick()
+        }
     }
 
     private fun endGame(winner: Player?) {
@@ -146,6 +161,7 @@ class MainActivity : AppCompatActivity() {
         currentPlayer = if (currentPlayer == player2) player1 else player2
         changeCurrentPlayerImage(pictures.getValue(currentPlayer))
         areTilesResponsive = true
+        makeAIMove()
     }
 
 }
