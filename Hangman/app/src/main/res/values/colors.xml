@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="background">#8C9EFF</color>
+    <color name="keyboardBackground">#3756EC</color>
+    <color name="backgroundDialog">#485388</color>
+    <color name="letterChosenBad">#7A0000</color>
+    <color name="letterChosenGood">#24520B</color>
+</resources>

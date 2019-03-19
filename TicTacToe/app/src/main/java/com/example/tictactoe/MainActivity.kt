@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun makeAIMove() {
         if (againstComputer && currentPlayer == player2 && areTilesResponsive) {
-            val availableButtons = coordsToButtons.filter { (k,_) -> !tiles.containsKey(k) }
+            val availableButtons = coordsToButtons.filterKeys { k -> !tiles.containsKey(k) }
             availableButtons.values.random().callOnClick()
         }
     }
