@@ -16,7 +16,9 @@ class MainActivity : AppCompatActivity() {
     private var lettersButtons = mutableMapOf<String,Button>()
     lateinit var word : String
     var attempts = 0
-
+enum class GameState {
+    WON, OVER
+}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -93,6 +95,9 @@ class MainActivity : AppCompatActivity() {
                     wordTextView.text = wordTextView.text.replaceRange(i,i+1,letter)
                 }
             }
+            if (!wordTextView.text.contains("?")) {
+                endGame(GameState.WON)
+            }
             true
         } else {
             attempts++
@@ -105,14 +110,23 @@ class MainActivity : AppCompatActivity() {
         if (attempts+2 <= 11)
             imageView.setImageResource(resources.getIdentifier("hangman"+(attempts+2),"drawable",packageName))
         if (attempts+2 == 11)
-            endGame()
+            endGame(GameState.OVER)
     }
 
-    private fun endGame() {
+    private fun endGame(gameState: GameState) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.end_game_dialog)
-        dialog.message.text = getString(R.string.secretWordDisplay,word)
         dialog.setCancelable(false)
+        when (gameState) {
+            GameState.OVER -> {
+                dialog.game_end_message.text = getString(R.string.game_over)
+                dialog.message.text = getString(R.string.secretWordDisplay,word)
+            }
+            GameState.WON -> {
+                dialog.game_end_message.text = getString(R.string.game_won)
+                dialog.message.text = getString(R.string.secretWordDisplayAndAttempts,word,attempts)
+            }
+        }
         dialog.againButton.setOnClickListener {
             dialog.dismiss()
             startGame()

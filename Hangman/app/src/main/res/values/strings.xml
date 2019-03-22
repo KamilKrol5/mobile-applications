@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">Hangman</string>
     <string name="game_over">Game over!</string>
+    <string name="game_won">Victory!</string>
+    <string name="game_end_mess">%s</string>
     <string name="again">AGAIN</string>
     <string name="secretWordDisplay">Word: %s</string>
+    <string name="secretWordDisplayAndAttempts">Word: %s\nAttempts: %d</string>
     <string-array name="letters">
         <item>A</item>
         <item>B</item>

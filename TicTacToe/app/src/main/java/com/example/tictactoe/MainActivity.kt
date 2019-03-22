@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TableRow
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.ceil
 import kotlin.random.Random
 
 const val dimension = 5
@@ -31,7 +32,11 @@ class MainActivity : AppCompatActivity() {
     private var currentPlayer = pictures.keys.elementAt((Random.nextInt(Player.values().size)))
     private var tiles = mutableMapOf<Pair<Int,Int>,Player>()
     private var coordsToButtons = mutableMapOf<Pair<Int,Int>,ImageButton>()
-
+    private val aiMoveFunctions = listOf(
+        ::moveHorizontal,::moveVertical
+    )
+    private var diagonalL = 0
+    private var diagonalR = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,6 +56,9 @@ class MainActivity : AppCompatActivity() {
                     this.setOnClickListener {
                         if (areTilesResponsive && !tiles.containsKey(i to j)) {
                             tiles[i to j] = currentPlayer
+                            if (currentPlayer == player1) {
+                                updateAIData(i,j)
+                            }
                             makeMove(this, currentPlayer)
                             val winner = checkGameState()
                             if (winner != null) {
@@ -75,12 +83,78 @@ class MainActivity : AppCompatActivity() {
         changeCurrentPlayerImage(pictures.getValue(currentPlayer))
     }
 
+    private fun updateAIData(first: Int, second: Int) {
+        if (first == second) {
+            diagonalL++
+        } else if (first == dimension - second + 1) {
+            diagonalR++
+        }
+    }
+
     private fun makeAIMove() {
         if (againstComputer && currentPlayer == player2 && areTilesResponsive) {
             val availableButtons = coordsToButtons.filterKeys { k -> !tiles.containsKey(k) }
-            availableButtons.values.random().callOnClick()
+            val enemyButtons = tiles.filter { k -> k.value == player1 }
+            if (enemyButtons.isNotEmpty()) {
+                val coordinates = enemyButtons.keys.last()
+                var randomIndex = (0 until aiMoveFunctions.size).random()
+                if(diagonalL >= ceil(dimension/2.0)) {
+                    for (i in 1..dimension)
+                        for (j in 0 until dimension)
+                            if (moveDiagonal(availableButtons,i to i,j,true,false)) return
+
+                } else if (diagonalR >= ceil(dimension/2.0)) {
+                    for (i in 1..dimension)
+                        for (j in 0 until dimension)
+                            if (moveDiagonal(availableButtons, i to (dimension - i + 1), j,false,true)) return
+                }
+                for (i in 0 until dimension) {
+                    when {
+                        aiMoveFunctions[randomIndex].invoke(availableButtons,coordinates,i) -> return
+                        aiMoveFunctions[(randomIndex+1).rem(aiMoveFunctions.size)].invoke(availableButtons,coordinates,i) -> return
+//                        aiMoveFunctions[(randomIndex+2).rem(aiMoveFunctions.size)].invoke(availableButtons,coordinates,i) -> return
+                        moveDiagonal(availableButtons,coordinates,i,true,true) -> return
+                    }
+                }
+                availableButtons.values.random().callOnClick()
+//                if (chosenCoordinates == -1 to -1)
+//                    availableButtons.values.random().callOnClick()
+            } else
+                availableButtons.values.random().callOnClick()
         }
     }
+
+    private fun moveDiagonal(availableButtons: Map<Pair<Int, Int>, ImageButton>,
+                             coordinates: Pair<Int, Int>,step : Int, checkLeft : Boolean,checkRight : Boolean) : Boolean{
+        return if (checkLeft && coordinates.first == coordinates.second &&
+            availableButtons.containsKey((coordinates.first + step).rem(dimension)+1 to (coordinates.second + step).rem(dimension)+1)) {
+                val chosenCoordinates = (coordinates.first + step).rem(dimension)+1 to (coordinates.second + step).rem(dimension)+1
+                availableButtons[chosenCoordinates]?.callOnClick()
+                true
+            } else if (checkRight && coordinates.first == dimension - coordinates.second +1 &&
+                availableButtons.containsKey((coordinates.first + step).rem(dimension)+1 to (coordinates.second-1 + dimension-1).rem(dimension)+1)) {
+                val chosenCoordinates = (coordinates.first + step).rem(dimension)+1 to (coordinates.second-1 + dimension-1 ).rem(dimension)+1
+                availableButtons[chosenCoordinates]?.callOnClick()
+                true
+        }
+        else false
+    }
+
+    private fun moveVertical(availableButtons: Map<Pair<Int, Int>, ImageButton>, coordinates: Pair<Int, Int>,step : Int) : Boolean{
+        return if (availableButtons.containsKey((coordinates.first + step).rem(dimension) + 1 to coordinates.second)) {
+            val chosenCoordinates = (coordinates.first + step).rem(dimension) + 1 to coordinates.second
+            availableButtons[chosenCoordinates]?.callOnClick()
+            true
+        } else false
+    }
+
+    private fun moveHorizontal(availableButtons: Map<Pair<Int, Int>, ImageButton>, coordinates: Pair<Int, Int>,step : Int) : Boolean{
+        return if (availableButtons.containsKey(coordinates.first to (coordinates.second + step).rem(dimension)+1)) {
+            val chosenCoordinates = coordinates.first to (coordinates.second + step).rem(dimension)+1
+            availableButtons[chosenCoordinates]?.callOnClick()
+            true } else false
+    }
+
 
     private fun endGame(winner: Player?) {
         //tableLayout.visibility = View.INVISIBLE
@@ -96,6 +170,11 @@ class MainActivity : AppCompatActivity() {
             winnerTextView.text = "TIE!"
         }
         areTilesResponsive = false
+    }
+
+    private fun resetAIData() {
+        diagonalL = 0
+        diagonalR = 0
     }
 
     private fun checkGameState() : Player? {
@@ -161,6 +240,7 @@ class MainActivity : AppCompatActivity() {
         currentPlayer = if (currentPlayer == player2) player1 else player2
         changeCurrentPlayerImage(pictures.getValue(currentPlayer))
         areTilesResponsive = true
+        resetAIData()
         makeAIMove()
     }
 
