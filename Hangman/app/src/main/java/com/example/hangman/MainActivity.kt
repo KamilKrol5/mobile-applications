@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TableRow
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.end_game_dialog.*
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,7 +48,8 @@ enum class GameState {
                 lettersButtons[l] = this
             })
         }
-
+        val size = resources.getStringArray(R.array.words).size
+        word = resources.getStringArray(R.array.words)[Random.nextInt().rem(size-1)]
         startGame()
     }
 
@@ -60,18 +62,19 @@ enum class GameState {
             v.isClickable = true
             v.setBackgroundColor(getColor(R.color.keyboardBackground))
         }
-        resources.openRawResource(R.raw.hangman_words).bufferedReader().forEachLine {
-            if (counter == 0) {
-                val amountOfLines = it.toInt()
-                randomLine = (1..amountOfLines).shuffled().random()
-            } else if (counter == randomLine) {
-                Log.i("xD","$counter, $randomLine, $it")
-                word = it
-                counter++
-                return@forEachLine
-            }
-            counter++
-        }
+//        resources.openRawResource(R.raw.hangman_words).bufferedReader().forEachLine {
+//            if (counter == 0) {
+//                val amountOfLines = it.toInt()
+//                randomLine = (1..amountOfLines).shuffled().random()
+//            } else if (counter == randomLine) {
+//                Log.i("xD","$counter, $randomLine, $it")
+//                word = it
+//                counter++
+//                return@forEachLine
+//            }
+//            counter++
+//        }
+
         if (!::word.isInitialized) {
             error("Something went wrong while choosing the word")
         }
