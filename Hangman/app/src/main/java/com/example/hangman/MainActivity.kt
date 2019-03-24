@@ -49,7 +49,7 @@ enum class GameState {
             })
         }
         val size = resources.getStringArray(R.array.words).size
-        word = resources.getStringArray(R.array.words)[Random.nextInt().rem(size-1)]
+        word = resources.getStringArray(R.array.words)[Random.nextInt(size-1)]
         startGame()
     }
 
