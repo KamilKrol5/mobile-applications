@@ -20,7 +20,7 @@ enum class Player{
 }
 
 class MainActivity : AppCompatActivity() {
-
+    private val limit = ceil(dimension/2.0)
     private var againstComputer = false
     private var areTilesResponsive = true
     private var player2 = Player.Circle
@@ -98,15 +98,30 @@ class MainActivity : AppCompatActivity() {
             if (enemyButtons.isNotEmpty()) {
                 val coordinates = enemyButtons.keys.last()
                 var randomIndex = (0 until aiMoveFunctions.size).random()
-                if(diagonalL >= ceil(dimension/2.0)) {
+                if(diagonalL >= limit) {
                     for (i in 1..dimension)
                         for (j in 0 until dimension)
                             if (moveDiagonal(availableButtons,i to i,j,true,false)) return
 
-                } else if (diagonalR >= ceil(dimension/2.0)) {
+                } else if (diagonalR >= limit) {
                     for (i in 1..dimension)
                         for (j in 0 until dimension)
                             if (moveDiagonal(availableButtons, i to (dimension - i + 1), j,false,true)) return
+                }
+                // if dangerous situation
+                for (i in 1..dimension) {
+                    var horizontal = 0
+                    var vertical = 0
+                    for (j in 1..dimension) {
+                        if (enemyButtons.containsKey(i to j)) horizontal ++
+                        if (enemyButtons.containsKey(j to i)) vertical++
+                    }
+                    if (horizontal >= limit)
+                        for (k in 0 until (dimension+1))
+                            if (moveHorizontal(availableButtons, i to 1,k)) return
+                    if (vertical >= limit)
+                        for (k in 0 until (dimension+1))
+                            if (moveVertical(availableButtons, 1 to i,k)) return
                 }
                 for (i in 0 until dimension) {
                     when {
@@ -125,15 +140,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun moveDiagonal(availableButtons: Map<Pair<Int, Int>, ImageButton>,
-                             coordinates: Pair<Int, Int>,step : Int, checkLeft : Boolean,checkRight : Boolean) : Boolean{
+                             coordinates: Pair<Int, Int>,step : Int, checkLeft : Boolean,checkRight : Boolean) : Boolean {
         return if (checkLeft && coordinates.first == coordinates.second &&
             availableButtons.containsKey((coordinates.first + step).rem(dimension)+1 to (coordinates.second + step).rem(dimension)+1)) {
                 val chosenCoordinates = (coordinates.first + step).rem(dimension)+1 to (coordinates.second + step).rem(dimension)+1
                 availableButtons[chosenCoordinates]?.callOnClick()
                 true
             } else if (checkRight && coordinates.first == dimension - coordinates.second +1 &&
-                availableButtons.containsKey((coordinates.first + step).rem(dimension)+1 to (coordinates.second-1 + dimension-1).rem(dimension)+1)) {
-                val chosenCoordinates = (coordinates.first + step).rem(dimension)+1 to (coordinates.second-1 + dimension-1 ).rem(dimension)+1
+                availableButtons.containsKey((coordinates.first + step).rem(dimension)+1 to (coordinates.second-1 - step + dimension-1).rem(dimension)+1)) {
+                val chosenCoordinates = (coordinates.first + step).rem(dimension)+1 to (coordinates.second-1 - step + dimension-1 ).rem(dimension)+1
                 availableButtons[chosenCoordinates]?.callOnClick()
                 true
         }

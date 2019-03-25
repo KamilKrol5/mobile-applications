@@ -48,8 +48,6 @@ enum class GameState {
                 lettersButtons[l] = this
             })
         }
-        val size = resources.getStringArray(R.array.words).size
-        word = resources.getStringArray(R.array.words)[Random.nextInt(size-1)]
         startGame()
     }
 
@@ -74,6 +72,8 @@ enum class GameState {
 //            }
 //            counter++
 //        }
+        val size = resources.getStringArray(R.array.words).size
+        word = resources.getStringArray(R.array.words)[Random.nextInt(size-1)]
 
         if (!::word.isInitialized) {
             error("Something went wrong while choosing the word")
