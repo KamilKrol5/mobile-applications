@@ -23,9 +23,6 @@ enum class GameState {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        var inflater = layoutInflater
-//        var keyboard = inflater.inflate(R.layout.keyboard_eng,null)
-//        keyboardTable.addView(keyboard)
 
         lateinit var currentRow : TableRow
         for ((counter, l) in resources.getStringArray(R.array.letters).withIndex()) {

@@ -132,8 +132,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 availableButtons.values.random().callOnClick()
-//                if (chosenCoordinates == -1 to -1)
-//                    availableButtons.values.random().callOnClick()
             } else
                 availableButtons.values.random().callOnClick()
         }
@@ -172,7 +170,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun endGame(winner: Player?) {
-        //tableLayout.visibility = View.INVISIBLE
         turnLabel.visibility = View.INVISIBLE
         currentPlayerImageView.visibility = View.INVISIBLE
         winnerTextView.visibility = View.VISIBLE
