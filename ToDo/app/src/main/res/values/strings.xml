@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_sort">Sort</string>
+    <string name="deadline">Deadline:</string>
+    <string name="priority">Priority:</string>
+    <string name="beforeCurrentDateError">Chosen date should be a future date</string>
+    <string name="error">Error</string>
+</resources>
