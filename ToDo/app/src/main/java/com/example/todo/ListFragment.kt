@@ -31,15 +31,7 @@ class ListFragment : Fragment() {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
 
-        try {
-            val file = File(context!!.filesDir,"tasks.json")
-            val gson = Gson()
-            val type = object : TypeToken<MutableList<Task>>(){}.type
-            taskList.addAll(gson.fromJson(FileReader(file),type))
 
-        } catch (ex: FileNotFoundException) {
-
-        }
     }
 
     override fun onCreateView(

@@ -30,7 +30,7 @@ class AddingTask : Fragment() {
     private var priority = 0
     private var pickedIcon = 0
     private var pickedColor = 0
-    private lateinit var previousBackgroundIcon: Drawable
+//    private lateinit var previousBackgroundIcon: Drawable
     private var icons = mutableMapOf<Int, ImageView>()
     private var iconsRecourdes = listOf<Int>(
         R.drawable.ic_home_black_24dp,
@@ -94,7 +94,7 @@ class AddingTask : Fragment() {
             }
             icons[j + radioGroup1.childCount] = radioGroup2.getChildAt(j) as ImageView
         }
-        previousBackgroundIcon = resources.getDrawable(R.color.homeColor, null)
+//        previousBackgroundIcon = resources.getDrawable(R.color.transparent, null)
 
         for (i in 0 until colorsGroup.childCount) {
             colorsGroup.getChildAt(i).setOnClickListener {
@@ -121,9 +121,10 @@ class AddingTask : Fragment() {
     }
 
     private fun pickIcon(index: Int) {
-        icons.getValue(pickedIcon).background = previousBackgroundIcon
+//        icons.getValue(pickedIcon).background = previousBackgroundIcon
+        icons.getValue(pickedIcon).background = null
         pickedIcon = index
-        previousBackgroundIcon = icons[pickedIcon]!!.background
+        //previousBackgroundIcon = icons[pickedIcon]!!.background
         icons.getValue(pickedIcon).background = resources.getDrawable(R.drawable.icon_frame, null)
     }
 
@@ -190,11 +191,14 @@ class AddingTask : Fragment() {
         outState.putInt("color", pickedColor)
         //outState.putInt("previousBackgroundIcon", previousBackgroundIcon)
         outState.putSerializable("date", datetime)
+//        val fragm = fragmentManager?.findFragmentByTag("listFragment") as ListFragment
+//        fragm.onSaveInstanceState(outState)
     }
 
     public fun addTask() {
         val task = Task(priority, editText.text.toString(), iconsRecourdes[pickedIcon], datetime, colorResources[pickedColor])
         addingTaskHandler.invoke(task)
+        (activity as MainActivity).showingAddingTask = false
         fragmentManager!!.popBackStack()
     }
 

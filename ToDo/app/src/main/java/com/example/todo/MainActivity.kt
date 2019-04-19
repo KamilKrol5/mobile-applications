@@ -10,17 +10,22 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
+import java.io.*
 import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
 
-//    var taskList = mutableListOf<Task>()
+    private val addingTaskHandler: (Task) -> Unit = { task ->
+        frgmt.taskList.add(task)
+
+            fab.show()
+
+    }
+    var showingAddingTask = false
     lateinit var frgmt : ListFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
             showAddingTaskFragment()
         }
         if (savedInstanceState == null) {
@@ -42,6 +47,18 @@ class MainActivity : AppCompatActivity() {
         } else {
             frgmt = supportFragmentManager.findFragmentByTag("listFragment") as ListFragment
         }
+        if (showingAddingTask) {
+            fab.hide()
+        }
+        try {
+            val file = File(filesDir,"tasks.json")
+            val gson = Gson()
+            val type = object : TypeToken<MutableList<Task>>(){}.type
+            frgmt.taskList.addAll(gson.fromJson(FileReader(file),type))
+
+        } catch (ex: FileNotFoundException) {
+
+        }
     }
 
     private fun showAddingTaskFragment() {
@@ -49,11 +66,9 @@ class MainActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = AddingTask()
-        fragment.addingTaskHandler = { task ->
-            frgmt.taskList.add(task)
-            fab.show()
-        }
-        fragmentTransaction.replace(R.id.frameLayout, fragment)
+        fragment.addingTaskHandler = addingTaskHandler
+        showingAddingTask = true
+        fragmentTransaction.replace(R.id.frameLayout, fragment, "addingTask")
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
@@ -61,6 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        showingAddingTask = false
         fab.show()
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -80,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         var cmpCounter = 0
     }
 
-    public fun sortTasks(menuItem: MenuItem) {
+    fun sortTasks(menuItem: MenuItem) {
         frgmt.taskList.sortByDescending { sortings[cmpCounter].second.invoke(it)}
         Log.i("xD",frgmt.taskList.toString())
         frgmt.recyclerView2.adapter?.notifyDataSetChanged()
@@ -110,5 +126,29 @@ class MainActivity : AppCompatActivity() {
         writer.append(str)
         writer.flush()
         writer.close()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (showingAddingTask) {
+            val fragm = supportFragmentManager.findFragmentByTag("addingTask") as AddingTask
+            fragm.addingTaskHandler = addingTaskHandler
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState?.let {
+            showingAddingTask = it.getBoolean("shownigAddingTask")
+        }
+        if (showingAddingTask) {
+            fab.hide()
+        }
+
+    }
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putBoolean("shownigAddingTask",showingAddingTask)
+
     }
 }
