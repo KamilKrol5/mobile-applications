@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() , PicturesDisplayFragment.OnListFragmen
                 pics[chosenIndex].rating = newRating ?: 0
                 pics[chosenIndex].description = newDescription ?: "ERROR"
                 fragm.adapter.notifyItemChanged(chosenIndex)
-                pics.sortBy { it.rating }
+                pics.sortBy { -it.rating }
                 fragm.adapter.notifyDataSetChanged()
             }
 //            else if (resultCode == Activity.RESULT_CANCELED) {

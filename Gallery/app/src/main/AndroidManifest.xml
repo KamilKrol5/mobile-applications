@@ -10,7 +10,8 @@
             android:roundIcon="@mipmap/icon"
             android:supportsRtl="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        <activity android:name=".PhotoViewActivity">
+        <activity android:name=".PhotoViewActivity"
+            android:theme="@style/Theme.AppCompat.Light">
         </activity>
         <activity
                 android:name=".MainActivity"
