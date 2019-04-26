@@ -1,7 +1,6 @@
 package com.example.gallery
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_picture.view.*
 import kotlinx.android.synthetic.main.fragment_picture_view.*
 import kotlinx.android.synthetic.main.fragment_picture_view.view.*
 import java.io.File
@@ -37,7 +35,7 @@ class PictureView : Fragment() {
         view.button.setOnClickListener { onOkButtonPressed() }
         view.ratingBar2.rating = picture.rating.toFloat()
         view.editText.setText(picture.description)
-        Picasso.get().load(File(picture.path)).error(R.drawable.ic_camera_alt_black_24dp).into(view.imageView2)
+        Picasso.get().load(File(picture.path)).error(R.drawable.ic_clear_black_24dp).into(view.imageView2)
         savedInstanceState?.let {
             view.ratingBar2.rating = it.getFloat("rating",view.ratingBar2.rating)
             view.editText.setText(it.getCharSequence("description"))

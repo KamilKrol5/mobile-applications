@@ -1,11 +1,9 @@
 package com.example.gallery
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
-import android.support.v4.app.ListFragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -20,17 +18,24 @@ class PicturesDisplayFragment : Fragment() {
     val pictures = mutableListOf<Picture>()
     val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/Camera"
     val directory = File(path)
-    val listAllFiles = directory.listFiles()
+
 
     init {
+        updatePictures()
+    }
+
+    fun updatePictures() {
+        pictures.clear()
+        val listAllFiles = directory.listFiles().sortedBy { -it.lastModified() }
         for (file in listAllFiles) {
             if (file.name.endsWith(".jpg")) {
                 Log.i("FILE", file.absolutePath)
                 pictures.add(Picture(file.absolutePath, 0, ""))
             }
         }
+        if (::adapter.isInitialized)
+            adapter.notifyDataSetChanged()
     }
-
 //    public val pictures = mutableListOf<Picture>(
 //        // FOR DEVELOPING PURPOSES
 //        Picture(path + "/20190413_144108.jpg", 4, "xD"),

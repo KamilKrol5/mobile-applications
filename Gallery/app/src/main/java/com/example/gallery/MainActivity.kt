@@ -4,16 +4,22 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.text.SimpleDateFormat
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.PersistableBundle
+import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
+import java.util.*
 
 const val PHOTO_VIEW_REQUEST_CODE = 124
+const val CAMERA_REQUEST_CODE = 100
 
 class MainActivity : AppCompatActivity() , PicturesDisplayFragment.OnListFragmentInteractionListener{
 
@@ -26,6 +32,30 @@ class MainActivity : AppCompatActivity() , PicturesDisplayFragment.OnListFragmen
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath +
+                    "/Camera/$timeStamp.jpg"
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
+                    takePictureIntent ->
+                // Ensure that there's a camera activity to handle the intent
+
+                takePictureIntent.resolveActivity(packageManager)?.also {
+                    // Create the File where the photo should go
+                    val file = File(path)
+
+                    file.also {
+                        val photoURI: Uri = GenericFileProvider.getUriForFile(
+                            this,
+                            "com.example.gallery.GenericFileProvider",
+                            it
+                        )
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
+                    }
+                }
+            }
         }
 
         // Here, thisActivity is the current activity
@@ -46,6 +76,18 @@ class MainActivity : AppCompatActivity() , PicturesDisplayFragment.OnListFragmen
             }
         } else {
             // Permission has already been granted
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.CAMERA),
+                    1)
+            }
         }
 
         val fragment = PicturesDisplayFragment()
@@ -88,6 +130,13 @@ class MainActivity : AppCompatActivity() , PicturesDisplayFragment.OnListFragmen
 //                transaction.commit()
 //
 //            }
+        } else if (requestCode == CAMERA_REQUEST_CODE) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                Log.i("xdd","Camera result OK")
+//                Log.i("xdd",data?.getStringExtra("output"))
+//            }
+            val fragm = supportFragmentManager.findFragmentByTag("display") as PicturesDisplayFragment
+            fragm.updatePictures()
         }
     }
 

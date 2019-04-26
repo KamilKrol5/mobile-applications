@@ -1,15 +1,10 @@
 package com.example.gallery
 
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-
-
-//import com.example.gallery.PicturesDisplayFragment.OnListFragmentInteractionListener
 import com.squareup.picasso.Picasso
 
 import kotlinx.android.synthetic.main.fragment_picture.view.*
@@ -36,7 +31,8 @@ class MyPictureRecyclerViewAdapter(
         with(holder.mView) {
             Log.i("XD",item.path)
             Log.i("XD",File(item.path).exists().toString())
-            Picasso.get().load(File(item.path)).error(R.drawable.ic_camera_alt_black_24dp).into(imageView)
+            Picasso.get().load(File(item.path)).error(R.drawable.ic_clear_black_24dp).into(imageView)
+//            imageView.setImageBitmap(ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(item.path), 500, 500))
             ratingBar.rating = item.rating.rem(ratingBar.max).toFloat()
             setOnClickListener{
                 mListener?.onListFragmentInteraction(item)
