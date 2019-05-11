@@ -7,10 +7,10 @@
     <color name="backgroundColor">#313131</color>
     <color name="textViewColor">#98F79E</color>
     <color name="homeColor">#FFBB33</color>
-    <color name="color1">#998AB0FC</color>
-    <color name="color2">#99FC8A8A</color>
-    <color name="color3">#9995FC8A</color>
-    <color name="color4">#99F8FC8A</color>
-    <color name="color5">#99D08AFC</color>
+    <color name="color1">#FFFFFF</color>
+    <color name="color2">#C4C4C4</color>
+    <color name="color3">#969696</color>
+    <color name="color4">#616161</color>
+    <color name="color5">#4E4E4E</color>
     <color name="transparent">#00000000</color>
 </resources>

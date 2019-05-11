@@ -119,6 +119,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onStop() {
+        super.onStop()
         val gson = Gson()
         val str = gson.toJson(frgmt.taskList)
         val file = File(filesDir,"tasks.json")
