@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Newton</string>
+    <string name="enter_expression">Enter expression</string>
+</resources>

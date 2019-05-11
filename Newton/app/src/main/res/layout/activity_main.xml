@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity" android:layout_marginBottom="0dp">
+
+    <Button
+            android:text="Simplify"
+            style="@style/AppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonSimplify"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/buttonFactor"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonSimplifyClicked"/>
+    <Button
+            android:text="Factor"
+            style="@style/AppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonFactor"
+            app:layout_constraintStart_toEndOf="@+id/buttonSimplify" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonLogarithm"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonFactorClicked"/>
+    <Button
+            android:text="Derive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonDerive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/buttonCosine"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonDeriveClicked"/>
+    <Button
+            android:text="Integrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonIntegrate"
+            app:layout_constraintBottom_toTopOf="@+id/guideline6"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonFindZeros" android:onClick="buttonIntegrateClicked"/>
+    <Button
+            android:text="Find 0's"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonFindZeros"
+            app:layout_constraintBottom_toTopOf="@+id/guideline6"
+            app:layout_constraintStart_toEndOf="@+id/buttonIntegrate" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonInverseTangent" android:onClick="buttonFindZerosClicked"/>
+    <Button
+            android:text="Find Tangent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonFindTangent"
+            app:layout_constraintStart_toEndOf="@+id/buttonAbsoluteValue"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonFindTangentClicked"/>
+    <Button
+            android:text="Area Under Curve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonAreaUnderCurve"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAbsoluteValue"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonAreaUnderCurveClicked"/>
+    <Button
+            android:text="Cosine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonCosine"
+            app:layout_constraintStart_toEndOf="@+id/buttonDerive" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSine"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonCosineClicked"/>
+    <Button
+            android:text="Sine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonSine"
+            app:layout_constraintStart_toEndOf="@+id/buttonCosine" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonSineClicked"/>
+    <Button
+            android:text="Tangent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonTangent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/buttonInverseCosine"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonTangentClicked"/>
+    <Button
+            android:text="Inverse Cosine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonInverseCosine"
+            app:layout_constraintStart_toEndOf="@+id/buttonTangent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonInverseSine"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonInverseCosineClicked"/>
+    <Button
+            android:text="Inverse Sine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonInverseSine"
+            app:layout_constraintStart_toEndOf="@+id/buttonInverseCosine" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonInverseSineClicked"/>
+    <Button
+            android:text="Inverse Tangent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonInverseTangent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline6"
+            app:layout_constraintStart_toEndOf="@+id/buttonFindZeros" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" android:onClick="buttonInverseTangentClicked"/>
+    <Button
+            android:text="Absolute Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonAbsoluteValue"
+            app:layout_constraintStart_toEndOf="@+id/buttonAreaUnderCurve" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonFindTangent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonAbsoluteValueClicked"/>
+    <Button
+            android:text="Logarithm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Button"
+            android:id="@+id/buttonLogarithm"
+            app:layout_constraintStart_toEndOf="@+id/buttonFactor" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonLogarithmClicked"/>
+    <EditText
+            android:layout_width="352dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:inputType="text"
+            android:hint="@string/enter_expression"
+            android:text="0"
+            android:ems="10"
+            android:id="@+id/editText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/buttonSimplify" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
+    <android.support.constraint.Guideline
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline"
+            app:layout_constraintGuide_percent="0.3"/>
+    <android.support.constraint.Guideline
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline2"
+            app:layout_constraintGuide_percent="0.3"/>
+    <android.support.constraint.Guideline
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline3"
+            app:layout_constraintGuide_percent="0.45"/>
+    <android.support.constraint.Guideline
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline4"
+            app:layout_constraintGuide_percent="0.6"/>
+    <android.support.constraint.Guideline
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline5"
+            app:layout_constraintGuide_percent="0.75"/>
+    <android.support.constraint.Guideline
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline6"
+            app:layout_constraintGuide_percent="0.9"/>
+
+</android.support.constraint.ConstraintLayout>
