@@ -1,6 +1,7 @@
 package com.example.tictactoe
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
@@ -9,6 +10,7 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 
 const val AUTH_RES = 900
 
@@ -25,6 +27,20 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initApp()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        AsyncTask.execute {
+            val q = FirebaseFirestore.getInstance().collection("activeUsers").whereEqualTo("id", user!!.uid).get()
+                .addOnCompleteListener {
+                    it.result?.apply {
+                        for (doc in this.documents) {
+                            doc.reference.delete()
+                        }
+                    }
+                }
+        }
     }
 
     private fun initApp() {

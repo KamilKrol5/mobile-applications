@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.tictactoe.model.ActiveUser
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.choose_mode_framgent.view.*
 
 
@@ -33,7 +36,13 @@ class ChooseModeFragment : Fragment() {
     }
 
     private fun onlineGameChosen() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val auth = FirebaseAuth.getInstance()
+        FirebaseFirestore.getInstance().collection("activeUsers")
+            .add(ActiveUser(auth.currentUser!!.displayName!!, false, auth.currentUser!!.uid))
+        val usersFragment = UsersFragment()
+        requireFragmentManager().beginTransaction().replace(R.id.mainLayout, usersFragment, "users")
+            .addToBackStack("chooseGame")
+            .commit()
     }
 
 
