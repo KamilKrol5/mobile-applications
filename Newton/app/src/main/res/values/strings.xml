@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Newton</string>
     <string name="enter_expression">Enter expression</string>
+    <string name="simplify">Simplify</string>
+    <string name="factor">Factor</string>
+    <string name="derive">Derive</string>
+    <string name="integrate">Integrate</string>
+    <string name="find_0_s">Find 0\'s</string>
+    <string name="find_tangent_x_fun">Find Tangent [x|fun]</string>
+    <string name="area_x_y_fun">Area [x:y|fun]</string>
+    <string name="cosine">Cosine</string>
+    <string name="sine">Sine</string>
+    <string name="tangent">Tangent</string>
+    <string name="inverse_cosine">Inverse Cosine</string>
+    <string name="inverse_sine">Inverse Sine</string>
+    <string name="inverse_tangent">Inverse Tangent</string>
+    <string name="absolute_value">Absolute Value</string>
+    <string name="logarithm_base_arg">Logarithm [base|arg]</string>
 </resources>

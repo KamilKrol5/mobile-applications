@@ -8,43 +8,48 @@
         tools:context=".MainActivity" android:layout_marginBottom="0dp">
 
     <Button
-            android:text="Simplify"
+            android:text="@string/simplify"
+            android:tag="simplify"
             style="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonSimplify"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/buttonFactor"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonSimplifyClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonClicked"/>
     <Button
-            android:text="Factor"
+            android:text="@string/factor"
+            android:tag="factor"
             style="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonFactor"
             app:layout_constraintStart_toEndOf="@+id/buttonSimplify" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonLogarithm"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonFactorClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonClicked"/>
     <Button
-            android:text="Derive"
+            android:text="@string/derive"
+            android:tag="derive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonDerive"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/buttonCosine"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonDeriveClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonClicked"/>
     <Button
-            android:text="Integrate"
+            android:text="@string/integrate"
+            android:tag="integrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonIntegrate"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/buttonFindZeros" android:onClick="buttonIntegrateClicked"/>
+            app:layout_constraintEnd_toStartOf="@+id/buttonFindZeros" android:onClick="buttonClicked"/>
     <Button
-            android:text="Find 0's"
+            android:text="@string/find_0_s"
+            android:tag="zeros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
@@ -53,95 +58,105 @@
             app:layout_constraintStart_toEndOf="@+id/buttonIntegrate" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonInverseTangent" android:onClick="buttonFindZerosClicked"/>
     <Button
-            android:text="Find Tangent"
+            android:text="@string/find_tangent_x_fun"
+            android:tag="tangent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonFindTangent"
             app:layout_constraintStart_toEndOf="@+id/buttonAbsoluteValue"
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonFindTangentClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonClicked"/>
     <Button
-            android:text="Area Under Curve"
+            android:text="@string/area_x_y_fun"
             android:layout_width="wrap_content"
+            android:tag="area"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonAreaUnderCurve"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonAbsoluteValue"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonAreaUnderCurveClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonClicked"/>
     <Button
-            android:text="Cosine"
+            android:text="@string/cosine"
+            android:tag="cos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonCosine"
             app:layout_constraintStart_toEndOf="@+id/buttonDerive" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonSine"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonCosineClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonClicked"/>
     <Button
-            android:text="Sine"
+            android:text="@string/sine"
+            android:tag="sin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonSine"
             app:layout_constraintStart_toEndOf="@+id/buttonCosine" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonSineClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline3" android:onClick="buttonClicked"/>
     <Button
-            android:text="Tangent"
+            android:text="@string/tangent"
+            android:tag="tan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonTangent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/buttonInverseCosine"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonTangentClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonClicked"/>
     <Button
-            android:text="Inverse Cosine"
+            android:text="@string/inverse_cosine"
+            android:tag="arccos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonInverseCosine"
             app:layout_constraintStart_toEndOf="@+id/buttonTangent" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonInverseSine"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonInverseCosineClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonClicked"/>
     <Button
-            android:text="Inverse Sine"
+            android:text="@string/inverse_sine"
+            android:tag="arcsin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonInverseSine"
             app:layout_constraintStart_toEndOf="@+id/buttonInverseCosine" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonInverseSineClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline4" android:onClick="buttonClicked"/>
     <Button
-            android:text="Inverse Tangent"
+            android:text="@string/inverse_tangent"
+            android:tag="arctan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonInverseTangent"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintStart_toEndOf="@+id/buttonFindZeros" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toEndOf="parent" android:onClick="buttonInverseTangentClicked"/>
+            app:layout_constraintEnd_toEndOf="parent" android:onClick="buttonClicked"/>
     <Button
-            android:text="Absolute Value"
+            android:text="@string/absolute_value"
+            android:tag="abs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonAbsoluteValue"
             app:layout_constraintStart_toEndOf="@+id/buttonAreaUnderCurve" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonFindTangent"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonAbsoluteValueClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline5" android:onClick="buttonClicked"/>
     <Button
-            android:text="Logarithm"
+            android:text="@string/logarithm_base_arg"
+            android:tag="log"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AppTheme.Button"
             android:id="@+id/buttonLogarithm"
             app:layout_constraintStart_toEndOf="@+id/buttonFactor" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonLogarithmClicked"/>
+            app:layout_constraintBottom_toTopOf="@+id/guideline2" android:onClick="buttonClicked"/>
     <EditText
             android:layout_width="352dp"
             android:layout_height="48dp"
