@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             tools:context=".ChooseModeFragment"
+                                             android:background="@color/colorAccent">
+
+
+    <Button
+            android:text="@string/play_on_this_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonThisPhone" android:background="@color/buttonColor"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="85dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="85dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonOnline" app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_chainStyle="packed"/>
+    <Button
+            android:text="@string/play_online"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonOnline" android:background="@color/buttonColor" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="85dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="85dp" app:layout_constraintTop_toBottomOf="@+id/buttonThisPhone"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_chainStyle="packed"/>
+    <ImageView
+            android:src="@drawable/circle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/imageView22" android:scaleType="centerCrop" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="@+id/buttonOnline"
+            app:layout_constraintTop_toBottomOf="@+id/buttonOnline" android:scaleX="0.7" android:scaleY="0.7"/>
+    <ImageView
+            android:src="@drawable/cross"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/imageView222" android:scaleType="centerCrop"
+            android:layout_marginTop="4dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp" android:scaleX="0.7"
+            android:scaleY="0.7" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/buttonThisPhone" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/buttonThisPhone"/>
+</android.support.constraint.ConstraintLayout>

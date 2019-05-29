@@ -33,7 +33,6 @@ class TicTacToeGame(
         diagonalR = 0
     }
 
-
     fun makeAIMove() {
         if (againstComputer && currentPlayer == player2 && areTilesResponsive) {
             val availableButtons = coordsToButtons.filterKeys { k -> !tiles.containsKey(k) }

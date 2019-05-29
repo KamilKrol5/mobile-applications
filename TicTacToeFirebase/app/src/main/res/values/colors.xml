@@ -2,6 +2,6 @@
 <resources>
     <color name="colorPrimary">#FF74A5</color>
     <color name="colorPrimaryDark">#C5577F</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">@android:color/holo_purple</color>
     <color name="buttonColor">#FF74A5</color>
 </resources>
