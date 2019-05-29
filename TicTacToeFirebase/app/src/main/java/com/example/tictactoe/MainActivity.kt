@@ -5,6 +5,8 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.example.tictactoe.model.ActiveUser
+import com.example.tictactoe.model.GameRoom
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -14,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 const val AUTH_RES = 900
 
-class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionListener, UsersFragment.OnListFragmentInteractionListener {
     override fun onFragmentInteraction() {
 
     }
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
     override fun onStop() {
         super.onStop()
         AsyncTask.execute {
-            val q = FirebaseFirestore.getInstance().collection("activeUsers").whereEqualTo("id", user!!.uid).get()
+            val q = FirebaseFirestore.getInstance().collection("activeUsers").whereEqualTo("id", user?.uid).get()
                 .addOnCompleteListener {
                     it.result?.apply {
                         for (doc in this.documents) {
@@ -92,6 +94,18 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
             }
         }
 
+    }
+
+    override fun onListFragmentInteraction(user: ActiveUser) {
+        if (user.id != auth.currentUser!!.uid) {
+            FirebaseFirestore.getInstance().collection("rooms").add(
+                GameRoom(
+                    auth.currentUser!!.uid,
+                    auth.currentUser!!.displayName.let { it } ?: "no name",
+                    user.id,
+                    user.name,
+                    currentUser = auth.currentUser!!.uid))
+        }
     }
 
 }

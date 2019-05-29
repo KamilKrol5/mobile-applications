@@ -99,5 +99,7 @@ abstract class FirestoreAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
 
     protected fun onError(e: FirebaseFirestoreException) {}
 
-    protected fun onDataChanged() {}
+    protected fun onDataChanged() {
+        notifyDataSetChanged()
+    }
 }

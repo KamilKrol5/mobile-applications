@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.fragment_user.view.*
 
 
 class UserRecyclerViewAdapter(
-    private val query: Query
-    , private val mListener: UsersFragment.OnListFragmentInteractionListener?
+    private val query: Query,
+    private val mListener: UsersFragment.OnListFragmentInteractionListener?
 ) : FirestoreAdapter<UserRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -26,7 +26,7 @@ class UserRecyclerViewAdapter(
             val item = v.tag as ActiveUser
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onListFragmentInteraction()
+            mListener?.onListFragmentInteraction(item)
         }
         setQuery(query)
     }

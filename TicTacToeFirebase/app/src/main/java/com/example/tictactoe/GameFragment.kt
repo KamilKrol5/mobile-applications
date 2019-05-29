@@ -10,7 +10,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TableRow
+import com.example.tictactoe.model.GameRoom
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.view.*
+import java.lang.StringBuilder
 import kotlin.random.Random
 
 
@@ -24,21 +29,32 @@ enum class Player {
 
 class GameFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
-    private var areTilesResponsive = true
     private var player2 = Player.Circle
     private var player1 = Player.Cross
     private var pictures = mapOf(
         player1 to R.drawable.cross,
         player2 to R.drawable.circle
     )
-    private var coordsToButtons = mutableMapOf<Pair<Int, Int>, ImageButton>()
-    private val game = TicTacToeGame(
+    var coordsToButtons = mutableMapOf<Pair<Int, Int>, ImageButton>()
+    val game = TicTacToeGame(
         mutableMapOf<Pair<Int, Int>, Player>(),
         coordsToButtons,
         pictures.keys.elementAt((Random.nextInt(Player.values().size))),
-        player1, player2, areTilesResponsive
+        player1, player2, true
     )
+    var online = false
+    var currentUserId: String? = null
+    var room: GameRoom? = null
+    var onlineGameDocument: DocumentReference? = null
+    var showSwitchPlayWithComputer = true
 
+    fun swapPlayers() {
+        val tmp = player1
+        player1 = player2
+        player2 = tmp
+        game.player1 = player1
+        game.player2 = player2
+    }
 
     private fun endGame(winner: Player?) {
         view!!.apply {
@@ -53,11 +69,12 @@ class GameFragment : Fragment() {
                 winnerImageView.visibility = View.INVISIBLE
                 winnerTextView.text = getString(R.string.tie_label)
             }
-            areTilesResponsive = false
+            game.areTilesResponsive = false
         }
     }
 
-    private fun makeMove(button: ImageButton, player: Player) {
+    fun makeMove(button: ImageButton, player: Player?) {
+        if (player == null) return
         game.currentPlayer = when (player) {
             Player.Cross -> {
                 button.setImageResource(pictures.getValue(player))
@@ -69,6 +86,22 @@ class GameFragment : Fragment() {
                 changeCurrentPlayerImage(pictures.getValue(Player.Cross))
                 player1
             }
+        }
+        if (online) {
+            game.areTilesResponsive = !game.areTilesResponsive
+            currentUserId = if (currentUserId == room!!.player1Id) room!!.player2Id else room!!.player1Id
+            var state = room!!.state
+            val pl1 = if (player1 == Player.Circle) Player.Circle else Player.Cross
+            val pl2 = if (pl1 == Player.Cross) Player.Circle else Player.Cross
+            for (i in 1..dimension) {
+                for (j in 1..dimension) {
+                    state = StringBuilder(state).also {
+                        it[3 * (i - 1) + j - 1] =
+                            if (game.tiles[i to j] == pl1) 'o' else if (game.tiles[i to j] == pl2) 'x' else return@also
+                    }.toString()
+                }
+            }
+            onlineGameDocument!!.update(mapOf("currentUser" to currentUserId, "state" to state))
         }
     }
 
@@ -93,7 +126,7 @@ class GameFragment : Fragment() {
             this.winnerImageView.visibility = View.INVISIBLE
             game.currentPlayer = if (game.currentPlayer == player2) player1 else player2
             changeCurrentPlayerImage(pictures.getValue(game.currentPlayer))
-            areTilesResponsive = true
+            game.areTilesResponsive = true
             game.resetAIData()
             game.makeAIMove()
         }
@@ -113,6 +146,9 @@ class GameFragment : Fragment() {
             val tableRow = TableRow(requireContext()).apply {
                 gravity = Gravity.CENTER
             }
+            if (!showSwitchPlayWithComputer) {
+                switchPlayWithComputer.visibility = View.INVISIBLE
+            }
             for (j in 1..dimension) {
                 tableRow.addView(ImageButton(requireContext()).apply {
                     val layoutParams2 = TableRow.LayoutParams(buttonSize, buttonSize)
@@ -122,7 +158,7 @@ class GameFragment : Fragment() {
                     setPadding(0, 0, 0, 0)
                     this.scaleType = ImageView.ScaleType.FIT_CENTER
                     this.setOnClickListener {
-                        if (areTilesResponsive && !game.tiles.containsKey(i to j)) {
+                        if (game.areTilesResponsive && !game.tiles.containsKey(i to j)) {
                             game.tiles[i to j] = game.currentPlayer
                             if (game.currentPlayer == player1) {
                                 game.updateAIData(i, j)
