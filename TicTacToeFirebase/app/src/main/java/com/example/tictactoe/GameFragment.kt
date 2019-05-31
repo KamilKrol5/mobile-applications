@@ -11,11 +11,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TableRow
 import com.example.tictactoe.model.GameRoom
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.view.*
-import java.lang.StringBuilder
 import kotlin.random.Random
 
 
@@ -45,7 +43,7 @@ class GameFragment : Fragment() {
     var online = false
     var currentUserId: String? = null
     var room: GameRoom? = null
-    var onlineGameDocument: DocumentReference? = null
+    var onlineGameIdInRooms: String? = null
     var showSwitchPlayWithComputer = true
 
     fun swapPlayers() {
@@ -90,18 +88,20 @@ class GameFragment : Fragment() {
         if (online) {
             game.areTilesResponsive = !game.areTilesResponsive
             currentUserId = if (currentUserId == room!!.player1Id) room!!.player2Id else room!!.player1Id
-            var state = room!!.state
+            var rState = room!!.state
             val pl1 = if (player1 == Player.Circle) Player.Circle else Player.Cross
             val pl2 = if (pl1 == Player.Cross) Player.Circle else Player.Cross
             for (i in 1..dimension) {
                 for (j in 1..dimension) {
-                    state = StringBuilder(state).also {
+                    rState = StringBuilder(rState).also {
                         it[3 * (i - 1) + j - 1] =
                             if (game.tiles[i to j] == pl1) 'o' else if (game.tiles[i to j] == pl2) 'x' else return@also
                     }.toString()
                 }
             }
-            onlineGameDocument!!.update(mapOf("currentUser" to currentUserId, "state" to state))
+            val currUserID = currentUserId!!
+            FirebaseDatabase.getInstance().reference.child("rooms").child(onlineGameIdInRooms!!)
+                .setValue(room.apply { this!!.currentUser = currUserID; this.state = rState })
         }
     }
 

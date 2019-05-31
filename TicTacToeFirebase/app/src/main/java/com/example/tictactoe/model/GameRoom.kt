@@ -2,12 +2,12 @@ package com.example.tictactoe.model
 
 
 data class GameRoom(
-    val player1Id: String = "null",
-    val player1Name: String = "null",
-    val player2Id: String = "null",
-    val player2Name: String = "null",
-    val currentUser: String = "null",
-    val state: String = "---------",
+    var player1Id: String = "null",
+    var player1Name: String = "null",
+    var player2Id: String = "null",
+    var player2Name: String = "null",
+    var currentUser: String = "null",
+    var state: String = "---------",
     var accepted: Boolean = false,
     var started: Boolean = false
 ) {

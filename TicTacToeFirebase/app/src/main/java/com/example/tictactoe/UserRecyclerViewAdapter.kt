@@ -1,23 +1,40 @@
 package com.example.tictactoe
 
+
+import android.support.v7.recyclerview.extensions.AsyncListDiffer
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.tictactoe.model.ActiveUser
-
-
-import com.example.tictactoe.model.FirestoreAdapter
-import com.google.firebase.firestore.Query
-
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
 
 class UserRecyclerViewAdapter(
-    private val query: Query,
+    private val databaseRef: DatabaseReference,
     private val mListener: UsersFragment.OnListFragmentInteractionListener?
-) : FirestoreAdapter<UserRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<UserRecyclerViewAdapter.ViewHolder>() {
+    private val mSnapshots = AsyncListDiffer<DataSnapshot>(this, object : DiffUtil.ItemCallback<DataSnapshot>() {
+        override fun areItemsTheSame(p0: DataSnapshot, p1: DataSnapshot): Boolean {
+            return p0 == p1
+        }
+
+        override fun areContentsTheSame(p0: DataSnapshot, p1: DataSnapshot): Boolean {
+            return p0.getValue(ActiveUser::class.java) == p1.getValue(ActiveUser::class.java)
+        }
+    })
+
+
+    override fun getItemCount(): Int {
+        return mSnapshots.currentList.size
+    }
 
     private val mOnClickListener: View.OnClickListener
 
@@ -28,7 +45,22 @@ class UserRecyclerViewAdapter(
             // one) that an item has been selected.
             mListener?.onListFragmentInteraction(item)
         }
-        setQuery(query)
+        val valListener = object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Log.i("info", error.toString())
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+//                mSnapshots.clear()
+//                snapshot.children.filter { it.child("inGame").value == false }.forEach {
+//                    mSnapshots.add(it.key!!)
+//                }
+                mSnapshots.submitList(snapshot.children.toList())
+            }
+
+        }
+
+        databaseRef.addValueEventListener(valListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,8 +70,8 @@ class UserRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val snapShot = getSnapshot(position)
-        val user = snapShot.toObject(ActiveUser::class.java)
+        val snapShot = mSnapshots.currentList[position]
+        val user = snapShot.getValue(ActiveUser::class.java)
         holder.nameFieldView.text = user!!.name
         holder.inGameFieldView.text = user.inGame.toString()
 
@@ -49,6 +81,7 @@ class UserRecyclerViewAdapter(
         }
     }
 
+
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val nameFieldView: TextView = mView.nameField
         val inGameFieldView: TextView = mView.inGameField
@@ -57,6 +90,5 @@ class UserRecyclerViewAdapter(
             return super.toString() + " '" + nameFieldView.text + "'"
         }
     }
-
 
 }

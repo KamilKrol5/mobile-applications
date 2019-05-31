@@ -12,11 +12,12 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.FirebaseDatabase
 
 const val AUTH_RES = 900
 
-class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionListener, UsersFragment.OnListFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionListener,
+    UsersFragment.OnListFragmentInteractionListener {
     override fun onFragmentInteraction() {
 
     }
@@ -34,14 +35,17 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
     override fun onStop() {
         super.onStop()
         AsyncTask.execute {
-            val q = FirebaseFirestore.getInstance().collection("activeUsers").whereEqualTo("id", user?.uid).get()
-                .addOnCompleteListener {
-                    it.result?.apply {
-                        for (doc in this.documents) {
-                            doc.reference.delete()
-                        }
-                    }
-                }
+            //            val q = FirebaseFirestore.getInstance().collection("activeUsers").whereEqualTo("id", user?.uid).get()
+//                .addOnCompleteListener {
+//                    it.result?.apply {
+//                        for (doc in this.documents) {
+//                            doc.reference.delete()
+//                        }
+//                    }
+//                }
+            val id = auth.currentUser?.let {
+                val g = FirebaseDatabase.getInstance().reference.child("activeUsers/${it.uid}").removeValue()
+            }
         }
     }
 
@@ -98,13 +102,19 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
 
     override fun onListFragmentInteraction(user: ActiveUser) {
         if (user.id != auth.currentUser!!.uid) {
-            FirebaseFirestore.getInstance().collection("rooms").add(
-                GameRoom(
-                    auth.currentUser!!.uid,
-                    auth.currentUser!!.displayName.let { it } ?: "no name",
-                    user.id,
-                    user.name,
-                    currentUser = auth.currentUser!!.uid))
+//            FirebaseFirestore.getInstance().collection("rooms").add(
+//                GameRoom(
+//                    auth.currentUser!!.uid,
+//                    auth.currentUser!!.displayName.let { it } ?: "no name",
+//                    user.id,
+//                    user.name,
+//                    currentUser = auth.currentUser!!.uid))
+            FirebaseDatabase.getInstance().reference.child("rooms/${auth.currentUser!!.uid}-room").setValue(GameRoom(
+                auth.currentUser!!.uid,
+                auth.currentUser!!.displayName.let { it } ?: "no name",
+                user.id,
+                user.name,
+                currentUser = auth.currentUser!!.uid))
         }
     }
 

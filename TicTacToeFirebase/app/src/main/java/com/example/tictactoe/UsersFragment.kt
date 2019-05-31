@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.tictactoe.model.ActiveUser
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.FirebaseDatabase
 
 
 class UsersFragment : Fragment() {
@@ -34,8 +34,8 @@ class UsersFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
                 val uId = FirebaseAuth.getInstance().currentUser!!.uid
-                val query = FirebaseFirestore.getInstance().collection("activeUsers").whereEqualTo("inGame", false)
-                adapter = UserRecyclerViewAdapter(query, listener)
+                adapter =
+                    UserRecyclerViewAdapter(FirebaseDatabase.getInstance().reference.child("activeUsers"), listener)
             }
         }
         return view
