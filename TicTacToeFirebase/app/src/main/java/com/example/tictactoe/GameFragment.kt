@@ -46,7 +46,7 @@ class GameFragment : Fragment() {
     var onlineGameIdInRooms: String? = null
     var showSwitchPlayWithComputer = true
 
-    fun swapPlayers() {
+    private fun swapPlayers() {
         val tmp = player1
         player1 = player2
         player2 = tmp
@@ -86,16 +86,16 @@ class GameFragment : Fragment() {
             }
         }
         if (online) {
-            game.areTilesResponsive = !game.areTilesResponsive
+//            game.areTilesResponsive = !game.areTilesResponsive
             currentUserId = if (currentUserId == room!!.player1Id) room!!.player2Id else room!!.player1Id
             var rState = room!!.state
-            val pl1 = if (player1 == Player.Circle) Player.Circle else Player.Cross
-            val pl2 = if (pl1 == Player.Cross) Player.Circle else Player.Cross
+//            val pl1 = if (player1 == Player.Circle) Player.Circle else Player.Cross
+//            val pl2 = if (pl1 == Player.Cross) Player.Circle else Player.Cross
             for (i in 1..dimension) {
                 for (j in 1..dimension) {
                     rState = StringBuilder(rState).also {
                         it[3 * (i - 1) + j - 1] =
-                            if (game.tiles[i to j] == pl1) 'o' else if (game.tiles[i to j] == pl2) 'x' else return@also
+                            if (game.tiles[i to j] == player1) 'o' else if (game.tiles[i to j] == player2) 'x' else return@also
                     }.toString()
                 }
             }
@@ -105,8 +105,26 @@ class GameFragment : Fragment() {
         }
     }
 
+    fun performMove(button: ImageButton, player: Player?) {
+        if (player == null) return
+        when (player) {
+            Player.Cross -> {
+                button.setImageResource(pictures.getValue(player))
+                changeCurrentPlayerImage(pictures.getValue(Player.Circle))
+            }
+            Player.Circle -> {
+                button.setImageResource(pictures.getValue(player))
+                changeCurrentPlayerImage(pictures.getValue(Player.Cross))
+            }
+        }
+    }
+
     private fun changeCurrentPlayerImage(image: Int) {
         view!!.currentPlayerImageView!!.setImageResource(image)
+    }
+
+    fun restartAction() {
+        if (view != null) startGame()
     }
 
     private fun startGame() {
@@ -129,6 +147,10 @@ class GameFragment : Fragment() {
             game.areTilesResponsive = true
             game.resetAIData()
             game.makeAIMove()
+            if (online) {
+                FirebaseDatabase.getInstance().reference.child("rooms").child(onlineGameIdInRooms!!)
+                    .setValue(room.apply { this!!.state = "---------" })
+            }
         }
     }
 

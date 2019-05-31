@@ -56,30 +56,13 @@ class ChooseModeFragment : Fragment() {
             .commit()
 
         val gameFragment = GameFragment()
-        dbRef.child("rooms").child(auth.currentUser!!.uid).addValueEventListener(
+        dbRef.child("rooms").child(auth.currentUser!!.uid + "-room").addValueEventListener(
             object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                     Log.i("info", p0.toString())
                 }
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val gameRoom =
-                        snapshot.getValue(GameRoom::class.java) //?: throw RuntimeException("received gameRoom val is null")
-                    Log.i("info", "$gameRoom")
-                    gameRoom?.let {
-                        if (!gameRoom.accepted) {
-                            //if (gameRoom.player1Id == auth.currentUser!!.uid) {
-                            AlertDialog.Builder(requireContext()).setMessage("User rejected your game offer.")
-                                .setPositiveButton(
-                                    "OK"
-                                ) { dialog, _ ->
-                                    dialog.cancel()
-                                }.setCancelable(false).show()
-                            //}
-                        }
-                    }
-                }
-
+                override fun onDataChange(snapshot: DataSnapshot) {}
             }
         )
         dbRef.child("rooms").addChildEventListener(object : ChildEventListener {
@@ -94,16 +77,19 @@ class ChooseModeFragment : Fragment() {
                 val gameRoom =
                     dataSnapshot.getValue(GameRoom::class.java) //?: throw RuntimeException("received gameRoom val is null")
                 gameRoom?.let {
-                    if (gameRoom.player2Id == auth.currentUser!!.uid || gameRoom.player1Id == auth.currentUser!!.uid) {
-                        if (gameRoom.accepted && !gameRoom.started) {
+                    if (it.player2Id == auth.currentUser!!.uid || it.player1Id == auth.currentUser!!.uid) {
+                        if (gameRoom.state == "---------" && !gameFragment.game.tiles.isEmpty()) {
+                            gameFragment.restartAction()
+                        }
+                        if (it.accepted && !it.started) {
                             gameFragment.apply {
                                 showSwitchPlayWithComputer = false
-                                currentUserId = gameRoom.player1Id
-                                room = gameRoom
+                                currentUserId = it.player1Id
+                                room = it
                                 game.areTilesResponsive = currentUserId == auth.currentUser!!.uid
-                                if (gameRoom.player1Id == auth.currentUser!!.uid) {
-                                    gameFragment.swapPlayers()
-                                }
+//                                if (it.player1Id == auth.currentUser!!.uid) {
+//                                    gameFragment.swapPlayers()
+//                                }
                             }
                             gameFragment.online = true
                             gameFragment.onlineGameIdInRooms = dataSnapshot.key
@@ -112,31 +98,35 @@ class ChooseModeFragment : Fragment() {
                                 .replace(R.id.mainLayout, gameFragment, "game")
                                 .addToBackStack("chooseGame")
                                 .commit()
-                            dbRef.child("rooms").child(dataSnapshot.key!!).setValue(gameRoom.apply { started = true })
-                        } else if (gameRoom.started) {
-                            gameFragment.room = gameRoom
+                            dbRef.child("rooms").child(dataSnapshot.key!!).setValue(it.apply { started = true })
+                        }  else if (it.started) {
+                            gameFragment.room = it
+                            gameFragment.currentUserId = it.currentUser
                             gameFragment.onlineGameIdInRooms = dataSnapshot.key
-                            if (gameRoom.currentUser == auth.currentUser!!.uid) {
+                            gameFragment.game.areTilesResponsive = gameFragment.currentUserId == auth.currentUser!!.uid
+                            if (it.currentUser == auth.currentUser!!.uid) {
+                                gameFragment.online = false
                                 for (e in gameFragment.coordsToButtons.entries) {
-                                    val charr = gameRoom.state.get(3 * (e.key.first - 1) + e.key.second - 1)
+                                    val charr = it.state.get(3 * (e.key.first - 1) + e.key.second - 1)
                                     when (charr) {
                                         '-' -> Unit
                                         'o' -> {
-                                            gameFragment.makeMove(
-                                                e.value,
-                                                if (gameFragment.game.currentPlayer != gameFragment.game.player2) gameFragment.game.currentPlayer else null
-                                            )
-                                            gameFragment.game.areTilesResponsive =
-                                                !gameFragment.game.areTilesResponsive
+
+                                                e.value.callOnClick()
+
+//                                            gameFragment.game.areTilesResponsive =
+//                                                !gameFragment.game.areTilesResponsive
                                         }
                                         'x' -> {
-                                            gameFragment.makeMove(
-                                                e.value,
-                                                if (gameFragment.game.currentPlayer != gameFragment.game.player1) gameFragment.game.currentPlayer else null
-                                            )
+
+                                                e.value.callOnClick()
+
+//                                            gameFragment.game.areTilesResponsive =
+//                                                !gameFragment.game.areTilesResponsive
                                         }
                                     }
                                 }
+                                gameFragment.online = true
                             }
                         }
                     }
@@ -158,7 +148,23 @@ class ChooseModeFragment : Fragment() {
                 }
             }
 
-            override fun onChildRemoved(p0: DataSnapshot) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                val gameRoom =
+                    snapshot.getValue(GameRoom::class.java) //?: throw RuntimeException("received gameRoom val is null")
+                Log.i("info", "$gameRoom")
+                gameRoom?.let {
+                    if (!gameRoom.accepted) {
+                        if (gameRoom.player1Id == auth.currentUser!!.uid) {
+                        AlertDialog.Builder(requireContext()).setMessage("User rejected your game offer.")
+                            .setPositiveButton(
+                                "OK"
+                            ) { dialog, _ ->
+                                dialog.cancel()
+                            }.setCancelable(false).show()
+                        }
+                    }
+                }
+            }
 
         })
 //            .addSnapshotListener(EventListener<QuerySnapshot> { snapshot, e ->
