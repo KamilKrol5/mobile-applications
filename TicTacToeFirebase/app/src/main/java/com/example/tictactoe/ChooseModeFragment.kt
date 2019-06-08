@@ -78,15 +78,17 @@ class ChooseModeFragment : Fragment() {
                     dataSnapshot.getValue(GameRoom::class.java) //?: throw RuntimeException("received gameRoom val is null")
                 gameRoom?.let {
                     if (it.player2Id == auth.currentUser!!.uid || it.player1Id == auth.currentUser!!.uid) {
-                        if (gameRoom.state == "---------" && !gameFragment.game.tiles.isEmpty()) {
+                        if (!gameRoom.interrupted && gameRoom.state == "---------" && !gameFragment.game.tiles.isEmpty()) {
+                            gameFragment.roomDbRef = dataSnapshot.ref
                             gameFragment.restartAction()
                         }
-                        if (it.accepted && !it.started) {
+                        if (it.accepted && !it.started && !gameRoom.interrupted) {
                             gameFragment.apply {
                                 showSwitchPlayWithComputer = false
                                 currentUserId = it.player1Id
                                 room = it
                                 game.areTilesResponsive = currentUserId == auth.currentUser!!.uid
+                                roomDbRef = dataSnapshot.ref
 //                                if (it.player1Id == auth.currentUser!!.uid) {
 //                                    gameFragment.swapPlayers()
 //                                }
@@ -99,8 +101,9 @@ class ChooseModeFragment : Fragment() {
                                 .addToBackStack("chooseGame")
                                 .commit()
                             dbRef.child("rooms").child(dataSnapshot.key!!).setValue(it.apply { started = true })
-                        }  else if (it.started) {
+                        } else if (it.started && !gameRoom.interrupted) {
                             gameFragment.room = it
+                            gameFragment.roomDbRef = dataSnapshot.ref
                             gameFragment.currentUserId = it.currentUser
                             gameFragment.onlineGameIdInRooms = dataSnapshot.key
                             gameFragment.game.areTilesResponsive = gameFragment.currentUserId == auth.currentUser!!.uid
@@ -112,14 +115,14 @@ class ChooseModeFragment : Fragment() {
                                         '-' -> Unit
                                         'o' -> {
 
-                                                e.value.callOnClick()
+                                            e.value.callOnClick()
 
 //                                            gameFragment.game.areTilesResponsive =
 //                                                !gameFragment.game.areTilesResponsive
                                         }
                                         'x' -> {
 
-                                                e.value.callOnClick()
+                                            e.value.callOnClick()
 
 //                                            gameFragment.game.areTilesResponsive =
 //                                                !gameFragment.game.areTilesResponsive
@@ -128,6 +131,9 @@ class ChooseModeFragment : Fragment() {
                                 }
                                 gameFragment.online = true
                             }
+                        } else if (gameRoom.interrupted) {
+                            gameFragment.room = null
+                            gameFragment.roomDbRef = null
                         }
                     }
                 }
@@ -153,113 +159,33 @@ class ChooseModeFragment : Fragment() {
                     snapshot.getValue(GameRoom::class.java) //?: throw RuntimeException("received gameRoom val is null")
                 Log.i("info", "$gameRoom")
                 gameRoom?.let {
-                    if (!gameRoom.accepted) {
-                        if (gameRoom.player1Id == auth.currentUser!!.uid) {
-                        AlertDialog.Builder(requireContext()).setMessage("User rejected your game offer.")
-                            .setPositiveButton(
-                                "OK"
-                            ) { dialog, _ ->
-                                dialog.cancel()
-                            }.setCancelable(false).show()
+                    if (it.player2Id == auth.currentUser!!.uid || it.player1Id == auth.currentUser!!.uid) {
+                        if (!gameRoom.accepted) {
+                            if (gameRoom.player1Id == auth.currentUser!!.uid && !gameRoom.interrupted) {
+                                AlertDialog.Builder(requireContext()).setMessage("User rejected your game offer.")
+                                    .setPositiveButton(
+                                        "OK"
+                                    ) { dialog, _ ->
+                                        dialog.cancel()
+                                    }.setCancelable(false).show()
+                            }
+                        } else if (gameRoom.interrupted) {
+                            AlertDialog.Builder(requireContext()).setMessage("User left game.")
+                                .setPositiveButton(
+                                    "OK"
+                                ) { dialog, _ ->
+                                    dialog.cancel()
+                                    val choseModeFragment = ChooseModeFragment()
+                                    requireFragmentManager().beginTransaction()
+                                        .replace(R.id.mainLayout, choseModeFragment, "chooseGame")
+                                        .commit()
+                                }.setCancelable(false).show()
                         }
                     }
                 }
             }
-
         })
-//            .addSnapshotListener(EventListener<QuerySnapshot> { snapshot, e ->
-//                if (e != null) {
-//                    Log.w("info", "Listen failed.", e)
-//                    return@EventListener
-//                }
-//
-//                if (snapshot != null && !snapshot.isEmpty) {
-//                    for (change in snapshot.documentChanges) {
-//                        val gameRoom = change.document.toObject(GameRoom::class.java)
-//                        if (change.type == DocumentChange.Type.ADDED) {
-//                            if (gameRoom.player2Id == auth.currentUser!!.uid) {
-//                                AlertDialog.Builder(requireContext())
-//                                    .setMessage("User ${gameRoom.player1Name} want to play with you. Do you accept it?")
-//                                    .setPositiveButton("YES", DialogInterface.OnClickListener { dialog, _ ->
-//                                        FirebaseFirestore.getInstance().collection("rooms").document(change.document.id)
-//                                            .update(mapOf("accepted" to true))
-//                                        dialog.cancel()
-//                                    }).setNegativeButton("NO", DialogInterface.OnClickListener { dialog, _ ->
-//                                        FirebaseFirestore.getInstance().collection("rooms").document(change.document.id)
-//                                            .delete()
-//                                        dialog.cancel()
-//                                    }).setCancelable(false).show()
-//                            }
-//                        } else if (change.type == DocumentChange.Type.MODIFIED) {
-//                            if (gameRoom.player2Id == auth.currentUser!!.uid || gameRoom.player1Id == auth.currentUser!!.uid) {
-//                                if (gameRoom.accepted && !gameRoom.started) {
-//                                    gameFragment.apply {
-//                                        showSwitchPlayWithComputer = false
-//                                        currentUserId = gameRoom.player1Id
-//                                        room = gameRoom
-//                                        game.areTilesResponsive = currentUserId == auth.currentUser!!.uid
-//                                        if (gameRoom.player1Id == auth.currentUser!!.uid) {
-//                                            gameFragment.swapPlayers()
-//                                        }
-//                                    }
-//                                    gameFragment.online = true
-//                                    gameFragment.onlineGameDocument =
-//                                        FirebaseFirestore.getInstance().collection("rooms").document(change.document.id)
-//                                    requireFragmentManager().beginTransaction()
-//                                        .replace(R.id.mainLayout, gameFragment, "game")
-//                                        .addToBackStack("chooseGame")
-//                                        .commit()
-//                                    FirebaseFirestore.getInstance().collection("rooms").document(change.document.id)
-//                                        .update(mapOf("started" to true))
-//                                } else if (gameRoom.started) {
-//                                    gameFragment.room = gameRoom
-//                                    gameFragment.onlineGameDocument =
-//                                        FirebaseFirestore.getInstance().collection("rooms").document(change.document.id)
-//                                    if (gameRoom.currentUser == auth.currentUser!!.uid) {
-//                                        for (e in gameFragment.coordsToButtons.entries) {
-//                                            val charr = gameRoom.state.get(3 * (e.key.first - 1) + e.key.second - 1)
-//                                            when (charr) {
-//                                                '-' -> Unit
-//                                                'o' -> {
-//                                                    gameFragment.makeMove(
-//                                                        e.value,
-//                                                        if (gameFragment.game.currentPlayer != gameFragment.game.player2) gameFragment.game.currentPlayer else null
-//                                                    )
-//                                                    gameFragment.game.areTilesResponsive =
-//                                                        !gameFragment.game.areTilesResponsive
-//                                                }
-//                                                'x' -> {
-//                                                    gameFragment.makeMove(
-//                                                        e.value,
-//                                                        if (gameFragment.game.currentPlayer != gameFragment.game.player1) gameFragment.game.currentPlayer else null
-//                                                    )
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        } else if (change.type == DocumentChange.Type.REMOVED) {
-//                            Log.i("info", "$gameRoom")
-//                            if (gameRoom.player1Id == auth.currentUser!!.uid) {
-//                                AlertDialog.Builder(requireContext()).setMessage("User rejected your game offer.")
-//                                    .setPositiveButton(
-//                                        "OK"
-//                                    ) { dialog, _ ->
-//                                        dialog.cancel()
-//                                    }.setCancelable(false).show()
-//                            }
-//                        }
-//                    }
-//
-//                    Log.d("info", "Current data: ${snapshot.documents}")
-//                } else {
-//                    Log.d("info", "Current data: null")
-//                }
-//            })
     }
-
-
 }
 
 class RoomViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {

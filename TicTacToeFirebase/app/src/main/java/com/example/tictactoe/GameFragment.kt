@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TableRow
 import com.example.tictactoe.model.GameRoom
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.android.synthetic.main.fragment_game.view.*
@@ -43,6 +44,7 @@ class GameFragment : Fragment() {
     var online = false
     var currentUserId: String? = null
     var room: GameRoom? = null
+    var roomDbRef : DatabaseReference? = null
     var onlineGameIdInRooms: String? = null
     var showSwitchPlayWithComputer = true
 
@@ -230,4 +232,14 @@ class GameFragment : Fragment() {
         fun onFragmentInteraction()
     }
 
+    override fun onPause() {
+        super.onPause()
+        room?.let {
+            it.interrupted = true
+            roomDbRef?.setValue(room)
+            roomDbRef!!.removeValue()
+            room = null
+            roomDbRef = null
+        }
+    }
 }

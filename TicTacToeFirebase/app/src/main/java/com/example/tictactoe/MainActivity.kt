@@ -49,6 +49,15 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        val id = auth.currentUser?.let {
+            val db = FirebaseDatabase.getInstance().reference
+            val g = db.child("activeUsers/${it.uid}").removeValue()
+            db.child("rooms")
+        }
+    }
+
     private fun initApp() {
         if (user == null) {
             login()
@@ -117,5 +126,4 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
                 currentUser = auth.currentUser!!.uid))
         }
     }
-
 }
