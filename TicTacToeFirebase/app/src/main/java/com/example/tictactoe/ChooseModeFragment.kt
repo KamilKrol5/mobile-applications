@@ -4,6 +4,7 @@ package com.example.tictactoe
 import android.app.AlertDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -52,7 +53,7 @@ class ChooseModeFragment : Fragment() {
 
         val usersFragment = UsersFragment()
         requireFragmentManager().beginTransaction().replace(R.id.mainLayout, usersFragment, "users")
-            .addToBackStack("chooseGame")
+            .addToBackStack("chooseUser")
             .commit()
 
         val gameFragment = GameFragment()
@@ -175,10 +176,13 @@ class ChooseModeFragment : Fragment() {
                                     "OK"
                                 ) { dialog, _ ->
                                     dialog.cancel()
-                                    val choseModeFragment = ChooseModeFragment()
-                                    requireFragmentManager().beginTransaction()
-                                        .replace(R.id.mainLayout, choseModeFragment, "chooseGame")
-                                        .commit()
+                                    requireFragmentManager().popBackStack(
+                                        "chooseUser",
+                                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                                    )
+                                    val db = FirebaseDatabase.getInstance().reference
+                                    val g = db.child("activeUsers/${auth.currentUser!!.uid}").removeValue()
+                                    dbRef.child("rooms").removeEventListener(this)
                                 }.setCancelable(false).show()
                         }
                     }

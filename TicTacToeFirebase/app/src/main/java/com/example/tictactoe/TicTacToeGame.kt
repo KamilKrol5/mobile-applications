@@ -13,11 +13,11 @@ class TicTacToeGame(
 ) {
     var againstComputer = false
 
-    private val limit = ceil(dimension/2.0)
+    private val limit = ceil(dimension / 2.0)
     private var diagonalL = 0
     private var diagonalR = 0
     private val aiMoveFunctions = listOf(
-        ::moveHorizontal,::moveVertical
+        ::moveHorizontal, ::moveVertical
     )
 
     fun updateAIData(first: Int, second: Int) {
@@ -138,7 +138,7 @@ class TicTacToeGame(
         } else false
     }
 
-    fun checkGameState() : Player? {
+    fun checkGameState(): Player? {
         for (i in 1..dimension) {
             tiles[i to 1]?.also { owner ->
                 if ((2..dimension).all { tiles[i to it] == owner }) {

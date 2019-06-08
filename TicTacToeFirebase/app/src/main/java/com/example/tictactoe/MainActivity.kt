@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
         val id = auth.currentUser?.let {
             val db = FirebaseDatabase.getInstance().reference
             val g = db.child("activeUsers/${it.uid}").removeValue()
-            db.child("rooms")
         }
     }
 
@@ -63,7 +62,8 @@ class MainActivity : AppCompatActivity(), GameFragment.OnFragmentInteractionList
             login()
         } else {
             if (supportFragmentManager.findFragmentByTag("game") == null) {
-                supportFragmentManager.beginTransaction().replace(R.id.mainLayout, ChooseModeFragment(), "chooseGame")
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.mainLayout, ChooseModeFragment(), "chooseGame")
                     .commit()
             }
         }

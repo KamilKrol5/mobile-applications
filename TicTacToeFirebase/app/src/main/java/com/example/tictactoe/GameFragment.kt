@@ -44,7 +44,7 @@ class GameFragment : Fragment() {
     var online = false
     var currentUserId: String? = null
     var room: GameRoom? = null
-    var roomDbRef : DatabaseReference? = null
+    var roomDbRef: DatabaseReference? = null
     var onlineGameIdInRooms: String? = null
     var showSwitchPlayWithComputer = true
 
@@ -228,12 +228,10 @@ class GameFragment : Fragment() {
 
 
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction()
     }
 
     override fun onPause() {
-        super.onPause()
         room?.let {
             it.interrupted = true
             roomDbRef?.setValue(room)
@@ -241,5 +239,6 @@ class GameFragment : Fragment() {
             room = null
             roomDbRef = null
         }
+        super.onPause()
     }
 }
